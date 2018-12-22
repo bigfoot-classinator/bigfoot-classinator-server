@@ -34,19 +34,3 @@ class BigfootClassination:
     prediction_values = self.__data['predictionValues']
     prediction_value = next(value for value in prediction_values if value['label'] == prediction_class)
     return prediction_value['value']
-
-
-# {
-#   'data': [
-#     {
-#       'predictionValues':
-#         [
-#           {'value': 0.0057984682, 'label': 'Class C'},
-#           {'value': 0.3942870124, 'label': 'Class B'},
-#           {'value': 0.5999145194, 'label': 'Class A'}
-#         ],
-#       'prediction': 'Class A',
-#       'rowId': 0
-#     }
-#   ]
-# }
