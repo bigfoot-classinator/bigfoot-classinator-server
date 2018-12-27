@@ -18,6 +18,7 @@ def info():
 @app.route('/classinate', methods=['POST'])
 @cross_origin()
 def classinate():
+  print(request.get_json())
   sighting = request.get_json()['sighting']
 
   model = BigfootClassinatorModel()
