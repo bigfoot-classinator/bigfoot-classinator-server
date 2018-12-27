@@ -12,6 +12,9 @@ app = Flask(__name__)
 @app.route('/info', methods=['GET'])
 @cross_origin()
 def info():
+  print("Dost thou desire info?")
+  sys.stdout.flush()
+
   return jsonify({
     'app'     : Settings.APP_NAME,
     'version' : Settings.APP_VERSION
