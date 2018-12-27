@@ -20,7 +20,7 @@ def info():
 @app.route('/classinate', methods=['POST'])
 @cross_origin()
 def classinate():
-  print request.get_json()
+  print(request.get_json())
   sys.stdout.flush()
 
   sighting = request.get_json()['sighting']
