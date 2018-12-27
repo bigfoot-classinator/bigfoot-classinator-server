@@ -1,3 +1,5 @@
+import sys
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
@@ -18,7 +20,9 @@ def info():
 @app.route('/classinate', methods=['POST'])
 @cross_origin()
 def classinate():
-  print(request.get_json())
+  print request.get_json()
+  sys.stdout.flush()
+
   sighting = request.get_json()['sighting']
 
   model = BigfootClassinatorModel()
