@@ -12,7 +12,6 @@ app = Flask(__name__)
 @app.route('/info', methods=['GET'])
 @cross_origin()
 def info():
-  print("Dost thou desire info?")
   sys.stdout.flush()
 
   return jsonify({
@@ -23,7 +22,6 @@ def info():
 @app.route('/classinate', methods=['POST'])
 @cross_origin()
 def classinate():
-  print(request.get_json())
   sys.stdout.flush()
 
   sighting = request.get_json()['sighting']
