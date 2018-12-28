@@ -26,6 +26,8 @@ def info():
 @cross_origin()
 def classinate():
 
+  print(f"Request: {request.get_json()}")
+
   sighting = request.get_json()['sighting']
 
   model = BigfootClassinatorModel()
