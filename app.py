@@ -12,28 +12,35 @@ app = Flask(__name__)
 @app.route('/info', methods=['GET'])
 @cross_origin()
 def info():
-  sys.stdout.flush()
 
-  return jsonify({
+  response = jsonify({
     'app'     : Settings.APP_NAME,
     'version' : Settings.APP_VERSION
   })
 
+  print(f"Response: {response.get_json()}")
+
+  return response
+
 @app.route('/classinate', methods=['POST'])
 @cross_origin()
 def classinate():
-  sys.stdout.flush()
+
+  print(f"Request: {request.get_json()}")
 
   sighting = request.get_json()['sighting']
 
   model = BigfootClassinatorModel()
   classination = model.classinate(sighting)
 
-  return jsonify({
+  response = jsonify({
     'classination' : classination.to_dict(),
     'sighting'     : sighting
   })
 
+  print(f"Response: {response.get_json()}")
+
+  return response
 
 if __name__ == '__main__':
   app.run()
