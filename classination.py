@@ -1,7 +1,6 @@
 class BigfootClassination:
   @classmethod
   def from_json(clazz, data):
-    print(data['data'][0])
     classination = clazz()
     classination.__data = data['data'][0]
     return classination
