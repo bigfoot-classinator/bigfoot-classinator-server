@@ -3,6 +3,7 @@ import os
 class Settings:
   APP_NAME = "Bigfoot Classinator"
   APP_VERSION = "2.1.0"
+  APP_ATTRIBUTION = "AI by DataRobot"
 
   API_TOKEN = os.environ['DATAROBOT_API_TOKEN']
   USERNAME = os.environ['DATAROBOT_API_USERNAME']

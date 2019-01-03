@@ -15,7 +15,8 @@ def info():
 
   response = jsonify({
     'app'     : Settings.APP_NAME,
-    'version' : Settings.APP_VERSION
+    'version' : Settings.APP_VERSION,
+    'attribution' : Settings.APP_ATTRIBUTION
   })
 
   print(f"Response: {response.get_json()}")
