@@ -11,5 +11,12 @@ class DataRobotAdapter:
       'datarobot-key': Settings.DATAROBOT_KEY
     }
 
+    print(f"DataRobot Request URL: {url}")
+    print(f"DataRobot Request Data: {data}")
+
     response = requests.post(url, auth=auth, headers=headers, data=data)
-    return response.json()
+    response_json = response.json()
+
+    print(f"DataRobot Response: url={url} data={data}")
+
+    return response_json
