@@ -17,6 +17,6 @@ class DataRobotAdapter:
     response = requests.post(url, auth=auth, headers=headers, data=data)
     response_json = response.json()
 
-    print(f"DataRobot Response: url={url} data={data}")
+    print(f"DataRobot Response: {response_json}")
 
     return response_json
