@@ -1,7 +1,6 @@
 import os
 import json
 
-from pandas import DataFrame
 from classination import BigfootClassination
 from datarobot_adapter import DataRobotAdapter
 
