@@ -5,9 +5,7 @@ class Settings:
   APP_VERSION = "3.0.0"
   APP_ATTRIBUTION = "AI by DataRobot"
 
-  API_TOKEN = os.environ['DATAROBOT_API_TOKEN']
-  USERNAME = os.environ['DATAROBOT_API_USERNAME']
-  DATAROBOT_KEY = os.environ['DATAROBOT_API_KEY']
+  USERNAME = os.environ['AI_API_USERNAME']
+  API_KEY = os.environ['AI_API_KEY']
 
-  DEPLOYMENT_ID = os.environ['BIGFOOT_CLASSINATOR_DEPLOYMENT_ID']
-  DEPLOYMENT_URL = 'https://datarobot-predictions.orm.datarobot.com/predApi/v1.0/deployments/%s/predictions' % DEPLOYMENT_ID
+  PROJECT_ID = os.environ['BIGFOOT_CLASSINATOR_PROJECT_ID']

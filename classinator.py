@@ -7,11 +7,10 @@ from datarobot_adapter import DataRobotAdapter
 
 class BigfootClassinatorModel:
   def classinate(self, sighting):
-    data = DataFrame([{ 'observed': sighting }])
-    data_json = data.to_json(orient='records')
+    data = [{ 'observed': sighting }]
 
     adapter = DataRobotAdapter()
-    prediction = adapter.predict(data_json)
+    prediction = adapter.predict(data)
 
     return BigfootClassination.from_json(prediction)
 

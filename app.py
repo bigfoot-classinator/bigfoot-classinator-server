@@ -31,6 +31,8 @@ def classinate():
 
   sighting = request.get_json()['sighting']
 
+  print(sighting)
+
   model = BigfootClassinatorModel()
   classination = model.classinate(sighting)
 

@@ -1,22 +1,13 @@
-import requests
-
+from datarobotai.client import DataRobotAIClient
 from settings import Settings
 
 class DataRobotAdapter:
   def predict(self, data):
-    url = Settings.DEPLOYMENT_URL
-    auth = (Settings.USERNAME, Settings.API_TOKEN)
-    headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'datarobot-key': Settings.DATAROBOT_KEY
-    }
+    dr = DataRobotAIClient.create(username=Settings.USERNAME, key=Settings.API_KEY)
+    ai = dr.projects.get_project(Settings.PROJECT_ID)
 
-    print(f"DataRobot Request URL: {url}")
     print(f"DataRobot Request Data: {data}")
 
-    response = requests.post(url, auth=auth, headers=headers, data=data)
-    response_json = response.json()
+    predictions = ai.infer('classification', data)
 
-    print(f"DataRobot Response: {response_json}")
-
-    return response_json
+    return predictions[0]
