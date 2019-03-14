@@ -36,10 +36,7 @@ def classinate():
   model = BigfootClassinatorModel()
   classination = model.classinate(sighting)
 
-  response = jsonify({
-    'classination' : classination.to_dict(),
-    'sighting'     : sighting
-  })
+  response = jsonify(classination)
 
   print(f"Response: {response.get_json()}")
 
