@@ -10,7 +10,7 @@ This README contains the instructions on how to use said code so that you can bu
 
 This example uses a model built using [DataRobot](https://www.datarobot.com/). You'll need a model there before this code can work. Fortunately, there's a [repository](https://github.com/bigfoot-classinator/bigfoot-classinator-model) just for that purpose complete with all the code, data, and instruction you need. If you haven't already, go there and build a model.
 
-> **NOTE**: When you're done building your model, you should have three environment variables set: AI_API_USERNAME, AI_API_KEY, and BIGFOOT_CLASSINATOR_PROJECT_ID. You'll need these set for the microservice as well.
+> **NOTE**: When you're done building your model, you should have two environment variables set: DATAROBOTAI_API_KEY, and BIGFOOT_CLASSINATOR_PROJECT_ID. You'll need these set for the microservice as well.
 
 ## Install You a Python
 

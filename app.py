@@ -1,25 +1,31 @@
+import os
+
 from datarobotai.client import DataRobotAIClient
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
-from settings import Settings
-
 # create the flask application
 app = Flask(__name__)
 
-# get the DataRobot AI client and AI learning session
-dr = DataRobotAIClient.create(username=Settings.USERNAME, key=Settings.API_KEY)
-ai = dr.projects.get_project(Settings.PROJECT_ID)
+# get the API key and project ID from the environment
+api_key = os.environ['DATAROBOTAI_API_KEY']
+project_id = os.environ['BIGFOOT_CLASSINATOR_PROJECT_ID']
+
+# create a DataRobot AI client
+dr = DataRobotAIClient.create(api_key)
+
+# load the project
+ai = dr.projects.get_project(project_id)
 
 # /info route returns information about the application
 @app.route('/info', methods=['GET'])
 @cross_origin()
 def info():
   return jsonify({
-    'app'     : Settings.APP_NAME,
-    'version' : Settings.APP_VERSION,
-    'attribution' : Settings.APP_ATTRIBUTION
+    'app'         : "Bigfoot Classinator",
+    'version'     : "3.0.1",
+    'attribution' : "AI by DataRobot"
   })
 
 # /classinate route classinates a Bigfoot sighting
