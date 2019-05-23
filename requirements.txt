@@ -1,7 +1,7 @@
 certifi==2019.3.9
 chardet==3.0.4
 Click==7.0
-datarobot-ai==0.5.45
+./datarobot-ai-0.5.51.tar.gz
 Flask==1.0.2
 Flask-Cors==3.0.7
 gunicorn==19.9.0
