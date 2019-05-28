@@ -40,8 +40,8 @@ def classinate_route():
   sighting = request_json['sighting']
 
   # prediction the class and then use it to predict the believability
-  classination, class_a, class_b = classinate(latitude, longitude, sighting)
-  believability = believify(sighting, classination)
+  classination, class_a, class_b = classinate(sighting)
+  believability = believify(latitude, longitude, sighting, classination)
 
   # if the believability is high enough, store it
   if believability >= 3.0:
@@ -57,10 +57,10 @@ def classinate_route():
     }
   })
 
-def classinate(latitude, longitude, sighting):
+def classinate(sighting):
 
   # setup the prediction data
-  data = [{ 'latitude': latitude, 'longitude': longitude, 'observed': sighting }]
+  data = [{ 'observed': sighting }]
 
   # infer the predictions and select the first one
   prediction = list(ai.infer('classification', data))[0]
@@ -68,10 +68,10 @@ def classinate(latitude, longitude, sighting):
   # return the class and scores
   return prediction.prediction, prediction.score_for("Class A"), prediction.score_for("Class B")
 
-def believify(sighting, classification):
+def believify(latitude, longitude, sighting, classification):
 
   # setup the prediction data
-  data = [{ 'observed': sighting, 'classification': classification }]
+  data = [{ 'latitude': latitude, 'longitude': longitude, 'observed': sighting, 'classification': classification }]
 
   # infer the predictions and select the first one
   prediction = list(ai.infer('believability', data))[0]
