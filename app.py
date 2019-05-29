@@ -40,7 +40,7 @@ def classinate_route():
   longitude = request_json['longitude']
   sighting = request_json['sighting']
 
-  # prediction the class and then use it to predict the believability
+  # predict the class and then use it to predict the believability
   classination, class_a, class_b = predictor.classinate(sighting)
   believability = predictor.believify(latitude, longitude, sighting, classination)
 
@@ -57,6 +57,28 @@ def classinate_route():
       'selected' : classination
     }
   })
+
+
+# /dashboard route returns the top sightings for the dashboard
+@app.route('/dashboard', methods=['GET'])
+@cross_origin()
+def dashboard_route():
+
+  rows = data_access.fetch_top_sightings(100)
+
+  rows = [
+    {
+      'created_on': row[0].isoformat(),
+      'latitude': float(row[1]),
+      'longitude': float(row[2]),
+      'sighting': row[3],
+      'classination': row[4],
+      'believability': float(row[5])
+    } for row in rows ]
+
+  # return the prediction as JSON in the expected format
+
+  return jsonify(rows)
 
 
 # kick off the flask

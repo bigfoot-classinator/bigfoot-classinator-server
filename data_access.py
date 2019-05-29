@@ -25,6 +25,31 @@ class DataAccess:
     cursor.close()
     connection.close()
 
+  def fetch_top_sightings(self, top_count):
+
+    # open the connection and get the cursor
+    connection = psycopg2.connect(self.__url, sslmode=self.__ssl_mode)
+    cursor = connection.cursor()
+
+    # if there isn't a table, create it
+    cursor.execute(SELECT_SIGHTINGS_TABLE_COUNT)
+    if cursor.fetchone()[0] == 0:
+      cursor.execute(CREATE_SIGHTINGS_TABLE)
+
+    # select the sightings
+    cursor.execute(SELECT_TOP_SIGHTINGS, [top_count])
+    rows = cursor.fetchall()
+
+    print(rows)
+
+    # commit and close
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    # return the results
+    return rows
+
 
 SELECT_SIGHTINGS_TABLE_COUNT = """
   SELECT
@@ -55,4 +80,16 @@ INSERT_SIGHTING = """
   ) VALUES (
     CURRENT_TIMESTAMP, %s, %s, %s, %s, %s
   );
+"""
+
+SELECT_TOP_SIGHTINGS = """
+  SELECT
+    created_on, latitude, longitude,
+    sighting, classination, believability
+  FROM
+    sightings
+  ORDER BY
+    believability DESC,
+    created_on DESC
+  LIMIT %s;
 """
