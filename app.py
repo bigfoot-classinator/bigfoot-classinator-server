@@ -1,4 +1,5 @@
 import os
+import psycopg2
 
 from datarobotai.client import DataRobotAIClient
 
@@ -8,9 +9,26 @@ from flask_cors import CORS, cross_origin
 # create the flask application
 app = Flask(__name__)
 
-# get the API key and project ID from the environment
-api_key = os.environ['DATAROBOTAI_API_KEY']
-project_id = os.environ['BIGFOOT_CLASSINATOR_PROJECT_ID']
+# get the API key and database URL from the environment
+api_key = os.environ.get('DATAROBOTAI_API_KEY')
+database_url = os.environ.get('DATABASE_URL')
+
+# get the Project ID, SSL Mode, and Believability Threshold
+# from the environment and log them
+
+project_id = os.environ.get('BIGFOOT_CLASSINATOR_PROJECT_ID')
+print('Project ID is', project_id)
+
+ssl_mode = os.environ.get('SSL_MODE')
+print('SSL Mode is', ssl_mode)
+
+believability_threshold = os.environ.get('BELIEVABILITY_THRESHOLD')
+try:
+  float(believability_threshold)
+except:
+  believability_threshold = 0.0
+
+print('Believability Threshold is', believability_threshold)
 
 # create a DataRobot AI client
 dr = DataRobotAIClient.create(api_key)
@@ -44,8 +62,8 @@ def classinate_route():
   believability = believify(latitude, longitude, sighting, classination)
 
   # if the believability is high enough, store it
-  if believability >= 3.0:
-    store_sighting(latitude, longitude, sighting, classination)
+  if believability >= believability_threshold:
+    store_sighting(latitude, longitude, sighting, classination, believability)
 
   # return the prediction as JSON in the expected format
   return jsonify({
@@ -79,9 +97,27 @@ def believify(latitude, longitude, sighting, classification):
   # return the believability
   return prediction.prediction
 
-def store_sighting(latitude, longitude, sighting, classination):
-  # store it somehow
-  return
+def store_sighting(latitude, longitude, sighting, classination, believability):
+
+  # get a connection to the database
+  conn = psycopg2.connect(database_url, sslmode=ssl_mode)
+
+  # get a cursor
+  cur = conn.cursor()
+
+  # if there isn't a table, create it
+  cur.execute("SELECT count(*) FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE' AND table_name='sightings';")
+  count = cur.fetchone()[0]
+  if count == 0:
+    cur.execute("CREATE TABLE sightings (created_on timestamp, latitude decimal, longitude decimal, sighting text, classination varchar(7), believability decimal);")
+
+  # insert the sighting
+  cur.execute("INSERT INTO sightings (created_on, latitude, longitude, sighting, classination, believability) VALUES (CURRENT_TIMESTAMP, %s, %s, %s, %s, %s);", (latitude, longitude, sighting, classination, believability))
+
+  # commit and close
+  conn.commit()
+  cur.close()
+  conn.close()
 
 
 # kick off the flask
