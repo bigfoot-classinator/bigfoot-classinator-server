@@ -8,22 +8,51 @@ class DataAccess:
 
   def store_sighting(self, latitude, longitude, sighting, classination, believability):
 
-    # get a connection to the database
-    conn = psycopg2.connect(self.__url, sslmode=self.__ssl_mode)
-
-    # get a cursor
-    cur = conn.cursor()
+    # open the connection and get the cursor
+    connection = psycopg2.connect(self.__url, sslmode=self.__ssl_mode)
+    cursor = connection.cursor()
 
     # if there isn't a table, create it
-    cur.execute("SELECT count(*) FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE' AND table_name='sightings';")
-    count = cur.fetchone()[0]
-    if count == 0:
-      cur.execute("CREATE TABLE sightings (created_on timestamp, latitude decimal, longitude decimal, sighting text, classination varchar(7), believability decimal);")
+    cursor.execute(SELECT_SIGHTINGS_TABLE_COUNT)
+    if cursor.fetchone()[0] == 0:
+      cursor.execute(CREATE_SIGHTINGS_TABLE)
 
     # insert the sighting
-    cur.execute("INSERT INTO sightings (created_on, latitude, longitude, sighting, classination, believability) VALUES (CURRENT_TIMESTAMP, %s, %s, %s, %s, %s);", (latitude, longitude, sighting, classination, believability))
+    cursor.execute(INSERT_SIGHTING, (latitude, longitude, sighting, classination, believability))
 
     # commit and close
-    conn.commit()
-    cur.close()
-    conn.close()
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+SELECT_SIGHTINGS_TABLE_COUNT = """
+  SELECT
+    count(*)
+  FROM
+    information_schema.tables
+  WHERE
+    table_schema='public' AND
+    table_type='BASE TABLE' AND
+    table_name='sightings';
+"""
+
+CREATE_SIGHTINGS_TABLE = """
+  CREATE TABLE sightings (
+    created_on timestamp,
+    latitude decimal,
+    longitude decimal,
+    sighting text,
+    classination varchar(7),
+    believability decimal
+  );
+"""
+
+INSERT_SIGHTING = """
+  INSERT INTO sightings (
+    created_on, latitude, longitude,
+    sighting, classination, believability
+  ) VALUES (
+    CURRENT_TIMESTAMP, %s, %s, %s, %s, %s
+  );
+"""
