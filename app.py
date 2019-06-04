@@ -63,7 +63,17 @@ def classinate_route():
 @cross_origin()
 def dashboard_route():
 
-  rows = data_access.fetch_top_sightings(settings.BELIEVABILITY_THRESHOLD, 5000)
+  try:
+    quantity = int(request.args.get('quantity'))
+  except:
+    quantity = 100
+
+  try:
+    threshold = float(request.args.get('threshold'))
+  except:
+    threshold = settings.BELIEVABILITY_THRESHOLD
+
+  rows = data_access.fetch_top_sightings(threshold, quantity)
 
   rows = [
     {
