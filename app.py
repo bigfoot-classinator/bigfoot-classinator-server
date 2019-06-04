@@ -44,9 +44,8 @@ def classinate_route():
   classination, class_a, class_b = predictor.classinate(sighting)
   believability = predictor.believify(latitude, longitude, sighting, classination)
 
-  # if the believability is high enough, store it
-  if believability >= settings.BELIEVABILITY_THRESHOLD:
-    data_access.store_sighting(latitude, longitude, sighting, classination, believability)
+  # store it all
+  data_access.store_sighting(latitude, longitude, sighting, classination, believability)
 
   # return the prediction as JSON in the expected format
   return jsonify({
@@ -64,7 +63,7 @@ def classinate_route():
 @cross_origin()
 def dashboard_route():
 
-  rows = data_access.fetch_top_sightings(100)
+  rows = data_access.fetch_top_sightings(settings.BELIEVABILITY_THRESHOLD, 100)
 
   rows = [
     {

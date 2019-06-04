@@ -25,7 +25,7 @@ class DataAccess:
     cursor.close()
     connection.close()
 
-  def fetch_top_sightings(self, top_count):
+  def fetch_top_sightings(self, believability, top_count):
 
     # open the connection and get the cursor
     connection = psycopg2.connect(self.__url, sslmode=self.__ssl_mode)
@@ -37,7 +37,7 @@ class DataAccess:
       cursor.execute(CREATE_SIGHTINGS_TABLE)
 
     # select the sightings
-    cursor.execute(SELECT_TOP_SIGHTINGS, [top_count])
+    cursor.execute(SELECT_TOP_SIGHTINGS, (believability, top_count))
     rows = cursor.fetchall()
 
     print(rows)
@@ -88,6 +88,8 @@ SELECT_TOP_SIGHTINGS = """
     sighting, classination, believability
   FROM
     sightings
+  WHERE
+    (latitude <> 0.0 OR longitude <> 0.0) AND believability > %s
   ORDER BY
     believability DESC,
     created_on DESC
