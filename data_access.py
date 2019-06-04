@@ -91,7 +91,6 @@ SELECT_TOP_SIGHTINGS = """
   WHERE
     (latitude <> 0.0 OR longitude <> 0.0) AND believability > %s
   ORDER BY
-    believability DESC,
-    created_on DESC
+    believability DESC
   LIMIT %s;
 """

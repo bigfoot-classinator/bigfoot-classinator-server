@@ -63,7 +63,7 @@ def classinate_route():
 @cross_origin()
 def dashboard_route():
 
-  rows = data_access.fetch_top_sightings(settings.BELIEVABILITY_THRESHOLD, 100)
+  rows = data_access.fetch_top_sightings(settings.BELIEVABILITY_THRESHOLD, 400)
 
   rows = [
     {
